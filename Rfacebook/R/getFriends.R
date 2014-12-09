@@ -37,7 +37,7 @@
 
 getFriends <- function(token, simplify=FALSE){
 	if (simplify==TRUE){
-		query <- 'https://graph.facebook.com/me/friends?limit=5000'
+		query <- paste0("https://graph.facebook.com/", friends$id[i],"?fields=context.fields(mutual_friends)")
 		content <- callAPI(query, token)
 		friends <- matrix(unlist(content$data), ncol=2, byrow=TRUE)
 		while (length(content$data)>0){
@@ -52,9 +52,7 @@ getFriends <- function(token, simplify=FALSE){
 	}	
 
 	if (simplify==FALSE){
-		query <- paste("https://graph.facebook.com/me/friends?",
-			"fields=id,name,first_name,last_name,gender,locale,birthday,location,",
-			"hometown,relationship_status,picture.type(large)&limit=100", sep="")
+		query <- paste0("https://graph.facebook.com/", friends$id[i],"?fields=context.fields(mutual_friends)")
 		content <- callAPI(query, token)
 		friends <- userDataToDF(content$data, private_info=TRUE)
 		while (length(content$data)>0){
